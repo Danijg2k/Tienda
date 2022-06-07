@@ -20,13 +20,14 @@ public class PrendaService {
         return (ArrayList<PrendaModel>) prendaRepository.findAll();
     }
 
-    // TODO Precio no sea negativo
     public PrendaModel guardarPrenda(PrendaModel prenda) {
         // Si no coincide con el patrón que no se pueda guardar
-        if (!prenda.getReferencia().matches(Constants.regexRef)) {
-            // No permitir hacer el POST
+        if (!prenda.getReferencia().matches(Constants.regexRef) || prenda.getPrecio() < 0) {
+            // No se realiza el POST/PUT
+            return null;
         }
-        // Hacemos que ambos precios coincidan
+        // Se puede realizar el POST/PUT (formato de datos correcto)
+        // Hacemos que ambos precios coincidan y hacemos POST/UPDATE
         prenda.setPrecio_promocionado(prenda.getPrecio());
         return prendaRepository.save(prenda);
     }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,27 +25,33 @@ public class PromocionController {
     PromocionService promocionService;
 
     @GetMapping()
-    public ArrayList<PromocionModel> obtenerPromociones() {
-        return promocionService.obtenerPromociones();
+    public ResponseEntity<ArrayList<PromocionModel>> obtenerPromociones() {
+        ArrayList<PromocionModel> promociones = promocionService.obtenerPromociones();
+        return new ResponseEntity<>(promociones, HttpStatus.OK);
     }
 
     @PostMapping()
-    public PromocionModel guardarPromocion(@RequestBody PromocionModel promocion) {
-        return promocionService.guardarPromocion(promocion);
+    public ResponseEntity<PromocionModel> guardarPromocion(@RequestBody PromocionModel promocion) {
+        PromocionModel promocionGuardada = promocionService.guardarPromocion(promocion);
+        // Avisamos de que se ha creado
+        return new ResponseEntity<>(promocionGuardada, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<PromocionModel> obtenerPromocionPorId(@PathVariable("id") String id) {
-        return promocionService.obtenerPorId(id);
+    public ResponseEntity<Optional<PromocionModel>> obtenerPromocionPorId(@PathVariable("id") String id) {
+        Optional<PromocionModel> promocion = promocionService.obtenerPorId(id);
+        if (promocion.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(promocion, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
-    public String eliminarPorId(@PathVariable("id") String id) {
+    public ResponseEntity<String> eliminarPorId(@PathVariable("id") String id) {
         boolean ok = this.promocionService.eliminarPromocion(id);
         if (ok) {
-            return "Eliminado promocion con id " + id;
-        } else {
-            return "No se ha podido eliminar el promocion con id " + id;
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

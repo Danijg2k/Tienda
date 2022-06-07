@@ -21,6 +21,10 @@ public class PrendaModel {
     @Enumerated(EnumType.STRING)
     private List<Categorias> categorias;
 
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "PromocionesAplicadas", joinColumns = @JoinColumn(name = "referencia_prenda", referencedColumnName = "referencia"), inverseJoinColumns = @JoinColumn(name = "nombre_promocion", referencedColumnName = "nombre"))
+    private List<PromocionModel> promocionesModels;
+
     public enum Categorias {
         Mujer, Hombre, Accesorios, Pantalones, Camisetas, Zapatos, Zapatillas
     }
