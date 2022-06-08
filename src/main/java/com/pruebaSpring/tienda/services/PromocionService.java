@@ -5,29 +5,37 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pruebaSpring.tienda.models.PromocionModel;
 import com.pruebaSpring.tienda.repositories.PromocionRepository;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PromocionService {
 
     @Autowired
     PromocionRepository promocionRepository;
 
-    public ArrayList<PromocionModel> obtenerPromociones() {
+    // GET ALL
+    @Transactional(readOnly = true)
+    public ArrayList<PromocionModel> getAllPromocion() {
         return (ArrayList<PromocionModel>) promocionRepository.findAll();
     }
 
-    public PromocionModel guardarPromocion(PromocionModel promocion) {
-        return promocionRepository.save(promocion);
-    }
-
-    public Optional<PromocionModel> obtenerPorId(String id) {
+    // GET BY ID
+    @Transactional(readOnly = true)
+    public Optional<PromocionModel> getByIdPromocion(String id) {
         return promocionRepository.findById(id);
     }
 
-    public boolean eliminarPromocion(String id) {
+    // POST / PUT
+    public PromocionModel ppPromocion(PromocionModel promocion) {
+        return promocionRepository.save(promocion);
+    }
+
+    // DELETE
+    public boolean deletePromocion(String id) {
         try {
             promocionRepository.deleteById(id);
             return true;
@@ -35,4 +43,5 @@ public class PromocionService {
             return false;
         }
     }
+
 }

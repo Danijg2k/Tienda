@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +21,27 @@ public class PrendaController {
     @Autowired
     PrendaService prendaService;
 
+    // GET ALL
     @GetMapping()
-    public ResponseEntity<ArrayList<PrendaModel>> obtenerPrendas() {
-        ArrayList<PrendaModel> prendas = prendaService.obtenerPrendas();
+    public ResponseEntity<ArrayList<PrendaModel>> getAll() {
+        ArrayList<PrendaModel> prendas = prendaService.getAllPrenda();
         return new ResponseEntity<>(prendas, HttpStatus.OK);
     }
 
+    // GET BY ID
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Optional<PrendaModel>> getById(@PathVariable("id") String id) {
+        Optional<PrendaModel> prenda = prendaService.getByIdPrenda(id);
+        if (prenda.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(prenda, HttpStatus.OK);
+    }
+
+    // POST
     @PostMapping()
-    public ResponseEntity<PrendaModel> guardarPrenda(@RequestBody PrendaModel prenda) {
-        PrendaModel prendaGuardada = prendaService.guardarPrenda(prenda);
+    public ResponseEntity<PrendaModel> post(@RequestBody PrendaModel prenda) {
+        PrendaModel prendaGuardada = prendaService.ppComprobationsPrenda(prenda);
         // Si el formato de datos no es válido
         if (prendaGuardada == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -35,10 +50,11 @@ public class PrendaController {
         return new ResponseEntity<>(prendaGuardada, HttpStatus.CREATED);
     }
 
+    // PUT
     @PutMapping(path = "/{id}")
-    public ResponseEntity<PrendaModel> modificarPrenda(@RequestBody PrendaModel prenda, @PathVariable("id") String id) {
+    public ResponseEntity<PrendaModel> put(@RequestBody PrendaModel prenda, @PathVariable("id") String id) {
         prenda.setReferencia(id);
-        PrendaModel prendaModificada = prendaService.guardarPrenda(prenda);
+        PrendaModel prendaModificada = prendaService.ppComprobationsPrenda(prenda);
         // Si el formato de datos no es válido
         if (prendaModificada == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -47,21 +63,14 @@ public class PrendaController {
         return new ResponseEntity<>(prendaModificada, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<PrendaModel>> obtenerPrendaPorId(@PathVariable("id") String id) {
-        Optional<PrendaModel> prenda = prendaService.obtenerPorId(id);
-        if (prenda.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(prenda, HttpStatus.OK);
-    }
-
+    // DELETE
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> eliminarPorId(@PathVariable("id") String id) {
-        boolean ok = this.prendaService.eliminarPrenda(id);
+    public ResponseEntity<?> delete(@PathVariable("id") String id) {
+        boolean ok = this.prendaService.deletePrenda(id);
         if (ok) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 }
