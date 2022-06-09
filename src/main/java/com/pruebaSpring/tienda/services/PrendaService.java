@@ -40,10 +40,10 @@ public class PrendaService {
     // POST / PUT (WITH COMPROBATIONS - USED NORMALLY)
     public PrendaModel ppComprobationsPrenda(PrendaModel prenda) {
         System.out.println("tres");
-        // Si no coincide con el patrón que no se pueda guardar
-        BigDecimal precioMin = new BigDecimal(0);
+        // Si la referencia no coincide con el patrón || precio es 0 o negativo ->
+        // devolvemos respuesta correspondiente
         if (!prenda.getReferencia().matches(StringConstants.regexRef)
-                || (prenda.getPrecio().compareTo(precioMin) <= 0)) {
+                || (prenda.getPrecio().compareTo(BigDecimal.valueOf(0)) <= 0)) {
             // No se realiza el POST/PUT
             return null;
         }

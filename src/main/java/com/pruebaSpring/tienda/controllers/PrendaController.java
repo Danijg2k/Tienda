@@ -40,7 +40,7 @@ public class PrendaController {
     @PostMapping()
     public ResponseEntity<PrendaModel> post(@RequestBody PrendaModel prenda) {
         // Truncamos el precio a dos decimales
-        bigDecimalFunctions.checkPrice(prenda);
+        bigDecimalFunctions.truncatePrice(prenda);
         //
         PrendaModel prendaGuardada = prendaService.ppComprobationsPrenda(prenda);
         // Si el formato de datos no es válido
@@ -57,7 +57,7 @@ public class PrendaController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<PrendaModel> put(@RequestBody PrendaModel prenda, @PathVariable("id") String id) {
         // Truncamos el precio a dos decimales
-        bigDecimalFunctions.checkPrice(prenda);
+        bigDecimalFunctions.truncatePrice(prenda);
         //
         prenda.setReferencia(id);
         PrendaModel prendaModificada = prendaService.ppComprobationsPrenda(prenda);

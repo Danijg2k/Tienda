@@ -31,7 +31,7 @@ public class PromocionModel {
 
     // Tiene que ser positivo, dos cifras decimales
     @Min(0)
-    @Digits(integer = 10, fraction = 2)
+    @Digits(integer = 2, fraction = 2)
     private BigDecimal descuento;
 
     // JsonIgnore para que no muestre esta parte en el JSON devuelto en peticiones

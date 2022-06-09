@@ -32,9 +32,9 @@ public class PromocionService {
 
     // POST / PUT
     public PromocionModel ppPromocion(PromocionModel promocion) {
-        // Si el descuento es 100% o mayor devolvemos respuesta correspondiente
-        BigDecimal descuentoMax = new BigDecimal(100); // Exclusivo (100 no es válido)
-        if (promocion.getDescuento().compareTo(descuentoMax) >= 0) {
+        // Si el descuento es <=0 || >=100 devolvemos respuesta correspondiente
+        if (promocion.getDescuento().compareTo(BigDecimal.valueOf(0)) <= 0
+                || promocion.getDescuento().compareTo(BigDecimal.valueOf(100)) >= 0) {
             // No se realiza el POST/PUT
             return null;
         }

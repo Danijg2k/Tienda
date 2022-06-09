@@ -13,12 +13,16 @@ public class bigDecimalFunctions {
     }
 
     // Prendas
-    public static void checkPrice(PrendaModel prenda) {
+    public static void truncatePrice(PrendaModel prenda) {
         prenda.setPrecio(truncate(prenda.getPrecio()));
     }
 
+    public static void truncatePromPrice(PrendaModel prenda) {
+        prenda.setPrecio_promocionado(truncate(prenda.getPrecio_promocionado()));
+    }
+
     // Promociones
-    public static void checkDiscount(PromocionModel promo) {
+    public static void truncateDiscount(PromocionModel promo) {
         promo.setDescuento(truncate(promo.getDescuento()));
     }
 }

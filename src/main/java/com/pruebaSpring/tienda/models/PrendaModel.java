@@ -35,12 +35,12 @@ public class PrendaModel {
 
     // Tiene que ser positivo, dos cifras decimales
     @Min(0)
-    @Digits(integer = 10, fraction = 2)
+    @Digits(integer = 8, fraction = 2)
     private BigDecimal precio;
 
     // Tiene que ser positivo, dos cifras decimales
     @Min(0)
-    @Digits(integer = 10, fraction = 2)
+    @Digits(integer = 8, fraction = 2)
     private BigDecimal precio_promocionado;
 
     @ElementCollection

@@ -1,5 +1,6 @@
 package com.pruebaSpring.tienda.controllers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class PromocionController {
     @PostMapping()
     public ResponseEntity<PromocionModel> post(@RequestBody PromocionModel promocion) {
         // Truncamos el precio a dos decimales
-        bigDecimalFunctions.checkDiscount(promocion);
+        bigDecimalFunctions.truncateDiscount(promocion);
         //
         PromocionModel promocionGuardada = promocionService.ppPromocion(promocion);
         // Si el formato de datos no es válido
@@ -133,9 +134,15 @@ public class PromocionController {
         pr.setPrecio_promocionado(pr.getPrecio());
         // Vamos aplicando los descuentos de las promociones
         for (PromocionModel promo : pr.getPromocionesModels()) {
-            pr.setPrecio_promocionado(pr.getPrecio_promocionado());
+            pr.setPrecio_promocionado(pr.getPrecio_promocionado().multiply(factor(promo)));
         }
+        // Truncamos el precio a dos decimales
+        bigDecimalFunctions.truncatePromPrice(pr);
         // Guardamos la modificación
         prendaService.ppPrecioPrenda(pr);
+    }
+
+    private BigDecimal factor(PromocionModel promo) {
+        return BigDecimal.valueOf(1).subtract(promo.getDescuento().divide(BigDecimal.valueOf(100)));
     }
 }
