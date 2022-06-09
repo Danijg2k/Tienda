@@ -42,12 +42,12 @@ public class PromocionController {
 
     // GET BY ID
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<PromocionModel>> getById(@PathVariable("id") String id) {
+    public ResponseEntity<PromocionModel> getById(@PathVariable("id") String id) {
         Optional<PromocionModel> promocion = promocionService.getByIdPromocion(id);
         if (promocion.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(promocion, HttpStatus.OK);
+        return new ResponseEntity<>(promocion.get(), HttpStatus.OK);
     }
 
     // POST

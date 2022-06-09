@@ -28,12 +28,12 @@ public class PrendaController {
 
     // GET BY ID
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<PrendaModel>> getById(@PathVariable("id") String id) {
+    public ResponseEntity<PrendaModel> getById(@PathVariable("id") String id) {
         Optional<PrendaModel> prenda = prendaService.getByIdPrenda(id);
         if (prenda.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(prenda, HttpStatus.OK);
+        return new ResponseEntity<>(prenda.get(), HttpStatus.OK);
     }
 
     // POST
