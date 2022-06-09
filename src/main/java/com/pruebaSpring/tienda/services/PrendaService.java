@@ -39,7 +39,6 @@ public class PrendaService {
 
     // POST / PUT (WITH COMPROBATIONS - USED NORMALLY)
     public PrendaModel ppComprobationsPrenda(PrendaModel prenda) {
-        System.out.println("tres");
         // Si la referencia no coincide con el patrón || precio es 0 o negativo ->
         // devolvemos respuesta correspondiente
         if (!prenda.getReferencia().matches(StringConstants.regexRef)

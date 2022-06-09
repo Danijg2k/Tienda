@@ -45,28 +45,10 @@ public class PrendaController {
         PrendaModel prendaGuardada = prendaService.ppComprobationsPrenda(prenda);
         // Si el formato de datos no es válido
         if (prendaGuardada == null) {
-            System.out.println("uno");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         // Avisamos de que se ha creado
-        System.out.println("dos");
         return new ResponseEntity<>(prendaGuardada, HttpStatus.CREATED);
-    }
-
-    // PUT
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<PrendaModel> put(@RequestBody PrendaModel prenda, @PathVariable("id") String id) {
-        // Truncamos el precio a dos decimales
-        bigDecimalFunctions.truncatePrice(prenda);
-        //
-        prenda.setReferencia(id);
-        PrendaModel prendaModificada = prendaService.ppComprobationsPrenda(prenda);
-        // Si el formato de datos no es válido
-        if (prendaModificada == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        // Avisamos de que se ha modificado
-        return new ResponseEntity<>(prendaModificada, HttpStatus.OK);
     }
 
     // DELETE
