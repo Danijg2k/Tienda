@@ -31,6 +31,12 @@ public class PromocionService {
 
     // POST / PUT
     public PromocionModel ppPromocion(PromocionModel promocion) {
+        // Si el descuento es 100% o mayor devolvemos respuesta correspondiente
+        if (promocion.getDescuento() >= 100.00) {
+            // No se realiza el POST/PUT
+            return null;
+        }
+        // Se puede realizar el POST/PUT (formato de datos correcto)
         return promocionRepository.save(promocion);
     }
 

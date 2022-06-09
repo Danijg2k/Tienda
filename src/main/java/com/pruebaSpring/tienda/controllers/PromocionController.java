@@ -52,6 +52,10 @@ public class PromocionController {
     @PostMapping()
     public ResponseEntity<PromocionModel> post(@RequestBody PromocionModel promocion) {
         PromocionModel promocionGuardada = promocionService.ppPromocion(promocion);
+        // Si el formato de datos no es válido
+        if (promocionGuardada == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         // Avisamos de que se ha creado
         return new ResponseEntity<>(promocionGuardada, HttpStatus.CREATED);
     }
@@ -59,8 +63,12 @@ public class PromocionController {
     // DELETE
     @DeleteMapping(path = "/{nombre}")
     public ResponseEntity<Boolean> delete(@PathVariable("nombre") String nombre) {
+        Optional<PromocionModel> promo = promocionService.getByIdPromocion(nombre);
+        if (promo.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         // Obtener prendas promocionadas por la promoción actual
-        Set<PrendaModel> prendasPromocionadas = promocionService.getByIdPromocion(nombre).get().getPrendasModels();
+        Set<PrendaModel> prendasPromocionadas = promo.get().getPrendasModels();
         // Si se puede borrar la promoción ->
         if (promocionService.deletePromocion(nombre)) {
             // -> Recalculamos precio promocionado de los productos afectados
@@ -89,8 +97,14 @@ public class PromocionController {
     // FUNCIÓN AUXILIAR PARA APLICAR / DESAPLICAR (NO REPETIR CÓDIGO)
     private ResponseEntity<Boolean> aplicarDesaplicarPromo(String nombre, String referencia, int opc) {
         // Recogemos la promoción y prenda
-        PromocionModel promo = promocionService.getByIdPromocion(nombre).get();
-        PrendaModel prenda = prendaService.getByIdPrenda(referencia).get();
+        Optional<PromocionModel> pro = promocionService.getByIdPromocion(nombre);
+        Optional<PrendaModel> pre = prendaService.getByIdPrenda(referencia);
+        // Si alguno de los dos no se encuentra devolvemos respuesta correspondiente
+        if (pro.isEmpty() || pre.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        PromocionModel promo = pro.get();
+        PrendaModel prenda = pre.get();
         // Debemos eliminar la prenda de la lista de prendas afectadas por la promoción
         Set<PrendaModel> prendas = promo.getPrendasModels();
         // Aplicamos o desaplicamos dependiendo del parámetro pasado
