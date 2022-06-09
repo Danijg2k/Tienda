@@ -1,5 +1,6 @@
 package com.pruebaSpring.tienda.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -32,7 +33,8 @@ public class PromocionService {
     // POST / PUT
     public PromocionModel ppPromocion(PromocionModel promocion) {
         // Si el descuento es 100% o mayor devolvemos respuesta correspondiente
-        if (promocion.getDescuento() >= 100.00) {
+        BigDecimal descuentoMax = new BigDecimal(100); // Exclusivo (100 no es válido)
+        if (promocion.getDescuento().compareTo(descuentoMax) >= 0) {
             // No se realiza el POST/PUT
             return null;
         }

@@ -1,4 +1,4 @@
-package com.pruebaSpring.tienda.constants;
+package com.pruebaSpring.tienda.utilities.constants;
 
 public abstract class StringConstants {
     // Regex para comprobar formato de 'ref' en prendas

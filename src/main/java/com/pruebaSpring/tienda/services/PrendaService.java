@@ -1,5 +1,6 @@
 package com.pruebaSpring.tienda.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -7,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pruebaSpring.tienda.constants.StringConstants;
 import com.pruebaSpring.tienda.models.PrendaModel;
 import com.pruebaSpring.tienda.repositories.PrendaRepository;
+import com.pruebaSpring.tienda.utilities.constants.StringConstants;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -38,8 +39,11 @@ public class PrendaService {
 
     // POST / PUT (WITH COMPROBATIONS - USED NORMALLY)
     public PrendaModel ppComprobationsPrenda(PrendaModel prenda) {
+        System.out.println("tres");
         // Si no coincide con el patrón que no se pueda guardar
-        if (!prenda.getReferencia().matches(StringConstants.regexRef) || prenda.getPrecio() < 0) {
+        BigDecimal precioMin = new BigDecimal(0);
+        if (!prenda.getReferencia().matches(StringConstants.regexRef)
+                || (prenda.getPrecio().compareTo(precioMin) <= 0)) {
             // No se realiza el POST/PUT
             return null;
         }

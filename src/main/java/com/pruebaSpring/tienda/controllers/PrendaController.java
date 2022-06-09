@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pruebaSpring.tienda.models.PrendaModel;
 import com.pruebaSpring.tienda.services.PrendaService;
+import com.pruebaSpring.tienda.utilities.functions.bigDecimalFunctions;
 
 @RestController
 @RequestMapping(value = "/prendas")
@@ -38,18 +39,26 @@ public class PrendaController {
     // POST
     @PostMapping()
     public ResponseEntity<PrendaModel> post(@RequestBody PrendaModel prenda) {
+        // Truncamos el precio a dos decimales
+        bigDecimalFunctions.checkPrice(prenda);
+        //
         PrendaModel prendaGuardada = prendaService.ppComprobationsPrenda(prenda);
         // Si el formato de datos no es válido
         if (prendaGuardada == null) {
+            System.out.println("uno");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         // Avisamos de que se ha creado
+        System.out.println("dos");
         return new ResponseEntity<>(prendaGuardada, HttpStatus.CREATED);
     }
 
     // PUT
     @PutMapping(path = "/{id}")
     public ResponseEntity<PrendaModel> put(@RequestBody PrendaModel prenda, @PathVariable("id") String id) {
+        // Truncamos el precio a dos decimales
+        bigDecimalFunctions.checkPrice(prenda);
+        //
         prenda.setReferencia(id);
         PrendaModel prendaModificada = prendaService.ppComprobationsPrenda(prenda);
         // Si el formato de datos no es válido

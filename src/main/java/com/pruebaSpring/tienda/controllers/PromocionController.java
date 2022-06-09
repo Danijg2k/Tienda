@@ -21,6 +21,7 @@ import com.pruebaSpring.tienda.models.PrendaModel;
 import com.pruebaSpring.tienda.models.PromocionModel;
 import com.pruebaSpring.tienda.services.PrendaService;
 import com.pruebaSpring.tienda.services.PromocionService;
+import com.pruebaSpring.tienda.utilities.functions.bigDecimalFunctions;
 
 @RestController
 @RequestMapping(value = "/promociones")
@@ -51,6 +52,9 @@ public class PromocionController {
     // POST
     @PostMapping()
     public ResponseEntity<PromocionModel> post(@RequestBody PromocionModel promocion) {
+        // Truncamos el precio a dos decimales
+        bigDecimalFunctions.checkDiscount(promocion);
+        //
         PromocionModel promocionGuardada = promocionService.ppPromocion(promocion);
         // Si el formato de datos no es válido
         if (promocionGuardada == null) {
@@ -129,7 +133,7 @@ public class PromocionController {
         pr.setPrecio_promocionado(pr.getPrecio());
         // Vamos aplicando los descuentos de las promociones
         for (PromocionModel promo : pr.getPromocionesModels()) {
-            pr.setPrecio_promocionado(pr.getPrecio_promocionado() * (1 - promo.getDescuento() / 100));
+            pr.setPrecio_promocionado(pr.getPrecio_promocionado());
         }
         // Guardamos la modificación
         prendaService.ppPrecioPrenda(pr);

@@ -1,16 +1,25 @@
 package com.pruebaSpring.tienda.models;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pruebaSpring.tienda.constants.StringConstants;
+import com.pruebaSpring.tienda.utilities.constants.StringConstants;
 
 @Entity
 @Table(name = "Prenda")
@@ -26,13 +35,13 @@ public class PrendaModel {
 
     // Tiene que ser positivo, dos cifras decimales
     @Min(0)
-    // @Digits(integer = 10, fraction = 2)
-    private double precio;
+    @Digits(integer = 10, fraction = 2)
+    private BigDecimal precio;
 
     // Tiene que ser positivo, dos cifras decimales
     @Min(0)
-    // @Digits(integer = 10, fraction = 2)
-    private double precio_promocionado;
+    @Digits(integer = 10, fraction = 2)
+    private BigDecimal precio_promocionado;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -56,19 +65,19 @@ public class PrendaModel {
         this.referencia = referencia;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return this.precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
-    public double getPrecio_promocionado() {
+    public BigDecimal getPrecio_promocionado() {
         return this.precio_promocionado;
     }
 
-    public void setPrecio_promocionado(double precio_promocionado) {
+    public void setPrecio_promocionado(BigDecimal precio_promocionado) {
         this.precio_promocionado = precio_promocionado;
     }
 
